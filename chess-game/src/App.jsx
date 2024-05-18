@@ -1,10 +1,12 @@
-import Board from './components/Board';
+import GameSetup from './components/GameSetup';
+
+
 
 const App = () => {
   return (
     <div className="app">
       <h1>Chess Game</h1>
-      <Board /> 
+      <GameSetup />
     </div>
   );
 };
