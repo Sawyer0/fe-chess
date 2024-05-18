@@ -1,11 +1,12 @@
-import '../../styles/Queen.css'
+import "../../styles/Queen.css";
 
-const Queen = ({color}) => {
-    return (
-        <div className={`queen ${color}`}>
-            {color === 'white' ? '♕' : '♛'}
-        </div>
-    );
+const Queen = ({ playerColor, gameStarted }) => {
+  if (!gameStarted) return null;
+  return (
+    <div className={`queen ${playerColor}`}>
+      {playerColor === "white" ? "♕" : "♛"}
+    </div>
+  );
 };
 
-export default Queen
+export default Queen;
