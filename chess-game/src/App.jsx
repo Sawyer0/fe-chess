@@ -1,13 +1,14 @@
-import GameSetup from './components/GameSetup';
-
-
+import { GameProvider } from './context/GameContext';
+import Game from './components/Game/Game';
 
 const App = () => {
   return (
-    <div className="app">
-      <h1>Chess Game</h1>
-      <GameSetup />
-    </div>
+    <GameProvider>
+      <div className="app">
+        <h1>Chess Game</h1>
+        <Game />
+      </div>
+    </GameProvider>
   );
 };
 
