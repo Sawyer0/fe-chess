@@ -1,6 +1,5 @@
-import Queen from "./pieces/Queen";
-import "../styles/board.css";
-import "../styles/Queen.css";
+import Queen from "../pieces/Queen";
+import "../../styles/board.css";
 
 const Square = ({
   color,

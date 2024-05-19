@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react";
-import "../styles/board.css";
+import { useContext } from "react";
 import Square from "./Square";
-import { initializeBoardState } from "../utils/utils";
-import { getValidMoves } from "../utils/chessRules";
+import { GameContext } from "../../context/GameContext";
+import { getValidMoves, isCheck, isCheckmate } from "../../utils/chessRules";
 
-const Board = ({ playerColor, gameStarted }) => {
-  const [boardState, setBoardState] = useState(() =>
-    initializeBoardState(playerColor)
-  );
-  const [selectedSquare, setSelectedSquare] = useState(null);
-  const [validMoves, setValidMoves] = useState([]);
-
-  useEffect(() => {
-    if (playerColor) {
-      setBoardState(initializeBoardState(playerColor));
-    }
-  }, [playerColor]);
+const Board = () => {
+  const {
+    boardState,
+    setBoardState,
+    currentTurn,
+    setCurrentTurn,
+    selectedSquare,
+    setSelectedSquare,
+    validMoves,
+    setValidMoves,
+    setGameStatus,
+  } = useContext(GameContext);
 
   const handleSquareClick = (position) => {
     if (selectedSquare) {
@@ -24,17 +23,26 @@ const Board = ({ playerColor, gameStarted }) => {
         updatedBoardState[position] = updatedBoardState[selectedSquare];
         delete updatedBoardState[selectedSquare];
         setBoardState(updatedBoardState);
+        if (isCheckmate(updatedBoardState, currentTurn)) {
+          setGameStatus("checkmate");
+        } else if (isCheck(updatedBoardState, currentTurn)) {
+          setGameStatus("check");
+        } else {
+          setGameStatus("ongoing");
+        }
         setSelectedSquare(null);
         setValidMoves([]);
+        setCurrentTurn(currentTurn === "white" ? "black" : "white");
       } else {
         setSelectedSquare(null);
         setValidMoves([]);
       }
     } else {
-      if (boardState[position]) {
-        const piece = boardState[position];
+      if (boardState[position] && boardState[position].color === currentTurn) {
         setSelectedSquare(position);
-        setValidMoves(getValidMoves(piece, position, boardState));
+        setValidMoves(
+          getValidMoves(boardState[position], position, boardState)
+        );
       }
     }
   };
@@ -54,8 +62,6 @@ const Board = ({ playerColor, gameStarted }) => {
             color={color}
             piece={piece}
             highlight={highlight}
-            gameStarted={gameStarted}
-            playerColor={playerColor}
             onClick={() => handleSquareClick(position)}
           />
         );
